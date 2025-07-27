@@ -4,7 +4,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.joml.Matrix4f;
 
 import net.minecraft.client.MinecraftClient;
-// import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.BufferBuilderStorage;
@@ -205,6 +204,7 @@ public class RenderHandler implements IRenderer
 
     private static final float FLEX_OVERLAY_EXPAND = 0.002f;
     private static final float ACCURATE_OUTLINE_EXPAND = 0.001f;
+    private static final Color4f FLEXIBLE_OVERLAY_BASE_COLOR = new Color4f(0.7529f, 0.188f, 0.188f, 0.9412f);
 
     private Color4f applyHue(Color4f base, float hueDegrees)
     {
@@ -252,14 +252,7 @@ public class RenderHandler implements IRenderer
             b /= max;
         }
 
-        // preserve user-configured alpha
-        Color4f base = Configs.Generic.FLEXIBLE_PLACEMENT_OVERLAY_COLOR.getColor();
-        float a = 1f;
-        try {
-            java.lang.reflect.Field fa = base.getClass().getDeclaredField("a");
-            fa.setAccessible(true);
-            a = fa.getFloat(base);
-        } catch (Exception ignored) { }
+        float a = 0.9412f;
 
         return new Color4f(r, g, b, a);
     }
@@ -282,7 +275,7 @@ public class RenderHandler implements IRenderer
             Color4f color = blendFlexibleColor(adj, off, rot);
             if (color == null)
             {
-                color = Configs.Generic.FLEXIBLE_PLACEMENT_OVERLAY_COLOR.getColor();
+                color = FLEXIBLE_OVERLAY_BASE_COLOR;
             }
             fi.dy.masa.malilib.render.RenderUtils.renderBlockTargetingOverlay(
                     entity,
@@ -319,13 +312,10 @@ public class RenderHandler implements IRenderer
                     color = new Color4f(1f - rVal, 1f - gVal, 1f - bVal, aVal);
                 } catch (Exception ignored) { }
             }
-            fi.dy.masa.tweakeroo.util.OutlineStyle style = (fi.dy.masa.tweakeroo.util.OutlineStyle) Configs.Generic.ACCURATE_PLACEMENT_OUTLINE_STYLE.getOptionListValue();
-            float lineWidth = style == fi.dy.masa.tweakeroo.util.OutlineStyle.THICK ? 3f : 1f;
+            float lineWidth = 1f;
 
             // Render on top of vanilla outline by disabling depth test temporarily
-            // RenderSystem.disableDepthTest();
             fi.dy.masa.malilib.render.RenderUtils.renderBlockOutline(hitResult.getBlockPos(), ACCURATE_OUTLINE_EXPAND, lineWidth, color, false);
-            // RenderSystem.enableDepthTest();
         }
     }
 }

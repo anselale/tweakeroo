@@ -67,7 +67,6 @@ public class Configs implements IConfigHandler
         public static final ConfigBoolean       FAST_PLACEMENT_REMEMBER_ALWAYS      = new ConfigBoolean     ("fastPlacementRememberOrientation", true).apply(GENERIC_KEY);
         public static final ConfigInteger       FAST_RIGHT_CLICK_COUNT              = new ConfigInteger     ("fastRightClickCount", 10, 1, 64).apply(GENERIC_KEY);
         public static final ConfigInteger       FILL_CLONE_LIMIT                    = new ConfigInteger     ("fillCloneLimit", 10000000, 1, 1000000000).apply(GENERIC_KEY);
-        public static final ConfigColor         FLEXIBLE_PLACEMENT_OVERLAY_COLOR    = new ConfigColor       ("flexibleBlockPlacementOverlayColor", "#C03030F0").apply(GENERIC_KEY);
         public static final ConfigDouble        FLY_DECELERATION_FACTOR             = new ConfigDouble      ("flyDecelerationFactor", 0.4, 0.0, 1.0).apply(GENERIC_KEY);
         public static final ConfigDouble        FLY_SPEED_PRESET_1                  = new ConfigDouble      ("flySpeedPreset1", 0.01, 0, 4).apply(GENERIC_KEY);
         public static final ConfigDouble        FLY_SPEED_PRESET_2                  = new ConfigDouble      ("flySpeedPreset2", 0.064, 0, 4).apply(GENERIC_KEY);
@@ -148,7 +147,6 @@ public class Configs implements IConfigHandler
         public static final ConfigDouble        ZOOM_FOV                            = new ConfigDouble      ("zoomFov", 30, 0.01, 359.99).apply(GENERIC_KEY);
         public static final ConfigBoolean       ZOOM_RESET_FOV_ON_ACTIVATE          = new ConfigBoolean     ("zoomResetFovOnActivate", true).apply(GENERIC_KEY);
         public static final ConfigColor         ACCURATE_PLACEMENT_OUTLINE_COLOR    = new ConfigColor       ("accuratePlacementOutlineColor", "#C0C0C0F0").apply(GENERIC_KEY);
-        public static final ConfigOptionList    ACCURATE_PLACEMENT_OUTLINE_STYLE    = new ConfigOptionList  ("accuratePlacementOutlineStyle", fi.dy.masa.tweakeroo.util.OutlineStyle.SOLID).apply(GENERIC_KEY);
 
         public static final ImmutableList<IConfigBase> OPTIONS = ImmutableList.of(
                 ACCURATE_PLACEMENT_PROTOCOL_MODE,
@@ -198,10 +196,8 @@ public class Configs implements IConfigHandler
 
                 CHAT_TIME_FORMAT,
                 CHAT_BACKGROUND_COLOR,
-                FLEXIBLE_PLACEMENT_OVERLAY_COLOR,
                 SNAP_AIM_INDICATOR_COLOR,
                 ACCURATE_PLACEMENT_OUTLINE_COLOR,
-                ACCURATE_PLACEMENT_OUTLINE_STYLE,
 
                 AFTER_CLICKER_CLICK_COUNT,
                 BLOCK_REACH_DISTANCE,

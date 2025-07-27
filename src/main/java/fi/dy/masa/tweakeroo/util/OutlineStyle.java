@@ -5,8 +5,7 @@ import fi.dy.masa.malilib.util.StringUtils;
 
 public enum OutlineStyle implements IConfigOptionListEntry
 {
-    SOLID ("solid", "tweakeroo.label.outline_style.solid"),
-    THICK ("thick", "tweakeroo.label.outline_style.thick");
+    SOLID ("solid", "tweakeroo.label.outline_style.solid");
 
     private final String configString;
     private final String translationKey;

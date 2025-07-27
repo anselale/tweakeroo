@@ -443,7 +443,6 @@
     "tweakeroo.config.generic.comment.fastPlacementRememberOrientation": "If enabled, then the Fast Block Placement feature will always remember\nthe orientation of the first block you place.\nWithout this, the orientation will only be remembered\nwith the Flexible Block Placement enabled and active.",
     "tweakeroo.config.generic.comment.fastRightClickCount": "The number of right clicks to do per game tick when\ntweakFastRightClick is enabled and the use button is held down",
     "tweakeroo.config.generic.comment.fillCloneLimit": "The new /fill and /clone block limit in single player,\nif the tweak to override them is enabled",
-    "tweakeroo.config.generic.comment.flexibleBlockPlacementOverlayColor": "The color of the currently pointed-at\nregion in block placement the overlay",
     "tweakeroo.config.generic.comment.flyDecelerationFactor": "This adjusts how quickly the player will stop if the\n'customFlyDeceleration' tweak is enabled",
     "tweakeroo.config.generic.comment.flySpeedIncrement1": "How much the fly speed changes for increment 1",
     "tweakeroo.config.generic.comment.flySpeedIncrement2": "How much the fly speed changes for increment 2",
@@ -551,7 +550,6 @@
     "tweakeroo.config.generic.name.fastPlacementRememberOrientation": "fastPlacementRememberOrientation",
     "tweakeroo.config.generic.name.fastRightClickCount": "fastRightClickCount",
     "tweakeroo.config.generic.name.fillCloneLimit": "fillCloneLimit",
-    "tweakeroo.config.generic.name.flexibleBlockPlacementOverlayColor": "flexibleBlockPlacementOverlayColor",
     "tweakeroo.config.generic.name.flyDecelerationFactor": "flyDecelerationFactor",
     "tweakeroo.config.generic.name.flySpeedIncrement1": "flySpeedIncrement1",
     "tweakeroo.config.generic.name.flySpeedIncrement2": "flySpeedIncrement2",
@@ -898,11 +896,7 @@
     "tweakeroo.message.warning.block_type_break_restriction": "§6Block breaking prevented by Block Type Break Restriction tweak",
     "tweakeroo.message.warning.entity_type_attack_restriction": "§6Entity attack prevented by Entity Type Attack Restriction tweak",
     "tweakeroo.config.generic.accuratePlacementOutlineColor": "Accurate Placement Outline Color",
-    "tweakeroo.config.generic.accuratePlacementOutlineStyle": "Accurate Placement Outline Style",
     "tweakeroo.config.generic.name.accuratePlacementOutlineColor": "accuratePlacementOutlineColor",
     "tweakeroo.config.generic.prettyName.accuratePlacementOutlineColor": "Accurate Placement Outline Color",
-    "tweakeroo.config.generic.name.accuratePlacementOutlineStyle": "accuratePlacementOutlineStyle",
-    "tweakeroo.config.generic.prettyName.accuratePlacementOutlineStyle": "Accurate Placement Outline Style",
-    "tweakeroo.label.outline_style.solid": "Solid",
-    "tweakeroo.label.outline_style.thick": "Thick"
+    "tweakeroo.config.generic.comment.accuratePlacementOutlineColor": "Outline color used during Accurate Placement."
 }
