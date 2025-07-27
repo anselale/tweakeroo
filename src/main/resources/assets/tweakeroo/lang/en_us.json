@@ -896,5 +896,13 @@
     "tweakeroo.message.value.off": "OFF",
     "tweakeroo.message.value.on": "ON",
     "tweakeroo.message.warning.block_type_break_restriction": "§6Block breaking prevented by Block Type Break Restriction tweak",
-    "tweakeroo.message.warning.entity_type_attack_restriction": "§6Entity attack prevented by Entity Type Attack Restriction tweak"
+    "tweakeroo.message.warning.entity_type_attack_restriction": "§6Entity attack prevented by Entity Type Attack Restriction tweak",
+    "tweakeroo.config.generic.accuratePlacementOutlineColor": "Accurate Placement Outline Color",
+    "tweakeroo.config.generic.accuratePlacementOutlineStyle": "Accurate Placement Outline Style",
+    "tweakeroo.config.generic.name.accuratePlacementOutlineColor": "accuratePlacementOutlineColor",
+    "tweakeroo.config.generic.prettyName.accuratePlacementOutlineColor": "Accurate Placement Outline Color",
+    "tweakeroo.config.generic.name.accuratePlacementOutlineStyle": "accuratePlacementOutlineStyle",
+    "tweakeroo.config.generic.prettyName.accuratePlacementOutlineStyle": "Accurate Placement Outline Style",
+    "tweakeroo.label.outline_style.solid": "Solid",
+    "tweakeroo.label.outline_style.thick": "Thick"
 }

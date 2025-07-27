@@ -4,6 +4,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.joml.Matrix4f;
 
 import net.minecraft.client.MinecraftClient;
+// import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.BufferBuilderStorage;
@@ -202,27 +203,129 @@ public class RenderHandler implements IRenderer
         }
     }
 
+    private static final float FLEX_OVERLAY_EXPAND = 0.002f;
+    private static final float ACCURATE_OUTLINE_EXPAND = 0.001f;
+
+    private Color4f applyHue(Color4f base, float hueDegrees)
+    {
+        float r = 0f, g = 0f, b = 0f, a = 1f;
+        try {
+            java.lang.reflect.Field fr = base.getClass().getDeclaredField("r");
+            java.lang.reflect.Field fg = base.getClass().getDeclaredField("g");
+            java.lang.reflect.Field fb = base.getClass().getDeclaredField("b");
+            java.lang.reflect.Field fa = base.getClass().getDeclaredField("a");
+            fr.setAccessible(true);
+            fg.setAccessible(true);
+            fb.setAccessible(true);
+            fa.setAccessible(true);
+            r = fr.getFloat(base);
+            g = fg.getFloat(base);
+            b = fb.getFloat(base);
+            a = fa.getFloat(base);
+        } catch (Exception ignored) { }
+        int rgbInt = ((int)(r * 255) << 16) | ((int)(g * 255) << 8) | ((int)(b * 255));
+        float[] hsv = java.awt.Color.RGBtoHSB((rgbInt >> 16) & 0xFF, (rgbInt >> 8) & 0xFF, rgbInt & 0xFF, null);
+        hsv[0] = (hueDegrees % 360f) / 360f;
+        int newRgb = java.awt.Color.HSBtoRGB(hsv[0], hsv[1], hsv[2]);
+        float newR = ((newRgb >> 16) & 0xFF) / 255f;
+        float newG = ((newRgb >> 8) & 0xFF) / 255f;
+        float newB = (newRgb & 0xFF) / 255f;
+        return new Color4f(newR, newG, newB, a);
+    }
+
+    private Color4f blendFlexibleColor(boolean adj, boolean off, boolean rot)
+    {
+        if (adj == false && off == false && rot == false)
+            return null;
+
+        // additive RGB mixing of the primary colours
+        float r = 0f, g = 0f, b = 0f;
+        if (adj) r += 1f;   // Red
+        if (off) g += 1f;   // Green
+        if (rot) b += 1f;   // Blue
+
+        float max = Math.max(r, Math.max(g, b));
+        if (max > 1f)
+        {
+            r /= max;
+            g /= max;
+            b /= max;
+        }
+
+        // preserve user-configured alpha
+        Color4f base = Configs.Generic.FLEXIBLE_PLACEMENT_OVERLAY_COLOR.getColor();
+        float a = 1f;
+        try {
+            java.lang.reflect.Field fa = base.getClass().getDeclaredField("a");
+            fa.setAccessible(true);
+            a = fa.getFloat(base);
+        } catch (Exception ignored) { }
+
+        return new Color4f(r, g, b, a);
+    }
+
     private void renderOverlays(Matrix4f posMatrix, MinecraftClient mc)
     {
         Entity entity = mc.getCameraEntity();
+
+        boolean adj = Hotkeys.FLEXIBLE_BLOCK_PLACEMENT_ADJACENT.getKeybind().isKeybindHeld();
+        boolean off = Hotkeys.FLEXIBLE_BLOCK_PLACEMENT_OFFSET.getKeybind().isKeybindHeld();
+        boolean rot = Hotkeys.FLEXIBLE_BLOCK_PLACEMENT_ROTATION.getKeybind().isKeybindHeld();
 
         if (FeatureToggle.TWEAK_FLEXIBLE_BLOCK_PLACEMENT.getBooleanValue() &&
             entity != null &&
             mc.crosshairTarget != null &&
             mc.crosshairTarget.getType() == HitResult.Type.BLOCK &&
-            (Hotkeys.FLEXIBLE_BLOCK_PLACEMENT_ROTATION.getKeybind().isKeybindHeld() ||
-             Hotkeys.FLEXIBLE_BLOCK_PLACEMENT_OFFSET.getKeybind().isKeybindHeld() ||
-             Hotkeys.FLEXIBLE_BLOCK_PLACEMENT_ADJACENT.getKeybind().isKeybindHeld()))
+            (adj || off || rot))
         {
             BlockHitResult hitResult = (BlockHitResult) mc.crosshairTarget;
-            Color4f color = Configs.Generic.FLEXIBLE_PLACEMENT_OVERLAY_COLOR.getColor();
-
+            Color4f color = blendFlexibleColor(adj, off, rot);
+            if (color == null)
+            {
+                color = Configs.Generic.FLEXIBLE_PLACEMENT_OVERLAY_COLOR.getColor();
+            }
             fi.dy.masa.malilib.render.RenderUtils.renderBlockTargetingOverlay(
                     entity,
                     hitResult.getBlockPos(),
                     hitResult.getSide(),
                     hitResult.getPos(),
                     color, posMatrix);
+        }
+
+        /* Accurate placement outline */
+        boolean accurateFeature = FeatureToggle.TWEAK_ACCURATE_BLOCK_PLACEMENT.getBooleanValue();
+        boolean accurateIn = Hotkeys.ACCURATE_BLOCK_PLACEMENT_IN.getKeybind().isKeybindHeld();
+        boolean accurateReverse = Hotkeys.ACCURATE_BLOCK_PLACEMENT_REVERSE.getKeybind().isKeybindHeld();
+        if (accurateFeature && entity != null && mc.crosshairTarget != null && mc.crosshairTarget.getType() == HitResult.Type.BLOCK && (accurateIn || accurateReverse))
+        {
+            BlockHitResult hitResult = (BlockHitResult) mc.crosshairTarget;
+            Color4f color = Configs.Generic.ACCURATE_PLACEMENT_OUTLINE_COLOR.getColor();
+            // invert RGB if reverse held
+            if (accurateReverse)
+            {
+                try {
+                    java.lang.reflect.Field fr = color.getClass().getDeclaredField("r");
+                    java.lang.reflect.Field fg = color.getClass().getDeclaredField("g");
+                    java.lang.reflect.Field fb = color.getClass().getDeclaredField("b");
+                    java.lang.reflect.Field fa = color.getClass().getDeclaredField("a");
+                    fr.setAccessible(true);
+                    fg.setAccessible(true);
+                    fb.setAccessible(true);
+                    fa.setAccessible(true);
+                    float rVal = fr.getFloat(color);
+                    float gVal = fg.getFloat(color);
+                    float bVal = fb.getFloat(color);
+                    float aVal = fa.getFloat(color);
+                    color = new Color4f(1f - rVal, 1f - gVal, 1f - bVal, aVal);
+                } catch (Exception ignored) { }
+            }
+            fi.dy.masa.tweakeroo.util.OutlineStyle style = (fi.dy.masa.tweakeroo.util.OutlineStyle) Configs.Generic.ACCURATE_PLACEMENT_OUTLINE_STYLE.getOptionListValue();
+            float lineWidth = style == fi.dy.masa.tweakeroo.util.OutlineStyle.THICK ? 3f : 1f;
+
+            // Render on top of vanilla outline by disabling depth test temporarily
+            // RenderSystem.disableDepthTest();
+            fi.dy.masa.malilib.render.RenderUtils.renderBlockOutline(hitResult.getBlockPos(), ACCURATE_OUTLINE_EXPAND, lineWidth, color, false);
+            // RenderSystem.enableDepthTest();
         }
     }
 }

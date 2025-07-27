@@ -41,7 +41,8 @@
         "world.MixinLightingProvider",
         "world.MixinServerChunkLoadingManager",
         "world.MixinUpdateStructureBlockC2SPacket",
-        "world.MixinWorld"
+        "world.MixinWorld",
+        "render.MixinWorldRenderer_BlockOutline"
     ],
     "client": [
         "MixinMinecraftClient",
